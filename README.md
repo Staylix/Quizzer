@@ -1,2 +1,2 @@
 # AndroidStudio
-My repo for my Android Stuio projects
+My repo for my Android Studio projects
