@@ -33,6 +33,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private Question mCurrentQuestion;
 
+    private int mNumbreQuestions;
+    private int mScore;
+
     //  Methods
 
     private QuestionBank generateQuestions() {
@@ -120,6 +123,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mAnswer2Button.setTag(1);
         mAnswer3Button.setTag(2);
         mAnswer4Button.setTag(3);
+
+        mNumbreQuestions = 5;
+        mScore = 0;
     }
 
 
@@ -132,7 +138,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         if (responseIndex == mCurrentQuestion.getAnswerIndex()) {
             Toast.makeText(this, "Bien joué ! ;)", Toast.LENGTH_LONG).show();
-        } else Toast.makeText(this, "Bien joué ! ;)", Toast.LENGTH_LONG).show();
+            mScore++;
+        } else Toast.makeText(this, "T'es naze !", Toast.LENGTH_LONG).show();
+
+        if (-- mNumbreQuestions > 0)
+        {
+            mCurrentQuestion = mQuestionBank.getQuestion();
+            displayQuestion(mCurrentQuestion);
+        }
+        else
+        {
+
+        }
 
     }
 
