@@ -16,7 +16,9 @@ import com.gentil.gregoire.insaturne.model.QuestionBank;
 import java.util.Arrays;
 
 
-
+/**
+ * Class that manage game logic
+ */
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     // Attributes
