@@ -25,20 +25,31 @@ public class MainActivity extends AppCompatActivity {
     private EditText mBlazeInput;
     private Button mPlayButton;
 
-    User mUser;
+    public User mUser;
+
+    private static final int GAME_ACTIVITY_REQUEST_CODE = 42;
 
 
     // Methods
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (GAME_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == resultCode) {
+            // Fetch the score from the Intent
+            int score = data.getIntExtra(GameActivity.BUNDLE_EXTRA_SCORE, 0);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mHelloText = (TextView) findViewById(R.id.activity_main_hello_text);
-        mHowText = (TextView) findViewById(R.id.activity_main_how_text);
-        mBlazeInput = (EditText) findViewById(R.id.activity_main_blaze_input);
-        mPlayButton = (Button) findViewById(R.id.activity_main_play_btn);
+        mHelloText = findViewById(R.id.activity_main_hello_text);
+        mHowText = findViewById(R.id.activity_main_how_text);
+        mBlazeInput = findViewById(R.id.activity_main_blaze_input);
+        mPlayButton = findViewById(R.id.activity_main_play_btn);
 
         mUser = new User();
 
@@ -58,17 +69,20 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                String temp = "Welcome " + s.toString() + " !";
+                mHelloText.setText(temp);
             }
         });
+
 
 
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
-                startActivity(gameActivity);
                 mUser.setFirstName(mBlazeInput.getText().toString());
+                Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
+                gameActivity.putExtra("firstName", mUser.getFirstName());
+                startActivityForResult(gameActivity, GAME_ACTIVITY_REQUEST_CODE);
             }
         });
     }

@@ -2,6 +2,9 @@
 
 package com.gentil.gregoire.insaturne.controller;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,8 +15,10 @@ import android.widget.Toast;
 import com.gentil.gregoire.insaturne.R;
 import com.gentil.gregoire.insaturne.model.Question;
 import com.gentil.gregoire.insaturne.model.QuestionBank;
+import com.gentil.gregoire.insaturne.model.User;
 
 import java.util.Arrays;
+
 
 
 /**
@@ -23,20 +28,25 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     // Attributes
 
-    private int a =8;
-
     private TextView mQuestionText;
     private Button mAnswer1Button;
     private Button mAnswer2Button;
     private Button mAnswer3Button;
     private Button mAnswer4Button;
 
+    private String firstName;
+
     private QuestionBank mQuestionBank;
 
     private Question mCurrentQuestion;
 
-    private int mNumbreQuestions;
+    private int mNumberQuestions;
     private int mScore;
+
+    public static final String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
+
+    public static final String BUNDLE_STATE_SCORE = "currentScore";
+    public static final String BUNDLE_STATE_QUESTION = "currentQuestion";
 
     //  Methods
 
@@ -103,13 +113,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        mQuestionText = (TextView) findViewById(R.id.activity_game_question_text);
-        mAnswer1Button = (Button) findViewById(R.id.activity_game_answer1_btn);
-        mAnswer2Button = (Button) findViewById(R.id.activity_game_answer2_btn);
-        mAnswer3Button = (Button) findViewById(R.id.activity_game_answer3_btn);
-        mAnswer4Button = (Button) findViewById(R.id.activity_game_answer4_btn);
+        mQuestionText = findViewById(R.id.activity_game_question_text);
+        mAnswer1Button = findViewById(R.id.activity_game_answer1_btn);
+        mAnswer2Button = findViewById(R.id.activity_game_answer2_btn);
+        mAnswer3Button = findViewById(R.id.activity_game_answer3_btn);
+        mAnswer4Button = findViewById(R.id.activity_game_answer4_btn);
 
         mQuestionBank = this.generateQuestions();
+
 
         mCurrentQuestion = mQuestionBank.getQuestion();
 
@@ -126,8 +137,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mAnswer3Button.setTag(2);
         mAnswer4Button.setTag(3);
 
-        mNumbreQuestions = 5;
-        mScore = 0;
+        if (savedInstanceState != null) {
+            mScore = savedInstanceState.getInt(BUNDLE_STATE_SCORE);
+            mNumberQuestions = savedInstanceState.getInt(BUNDLE_STATE_QUESTION);
+        } else {
+            mScore = 0;
+            mNumberQuestions = 5;
+        }
+
     }
 
 
@@ -139,21 +156,68 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         int responseIndex = (int) v.getTag();
 
         if (responseIndex == mCurrentQuestion.getAnswerIndex()) {
-            Toast.makeText(this, "Bien joué ! ;)", Toast.LENGTH_LONG).show();
             mScore++;
-        } else Toast.makeText(this, "T'es naze !", Toast.LENGTH_LONG).show();
+            if (mNumberQuestions > 1) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Well done!")
+                        .setMessage("Your actual score is " + mScore)
+                        .setPositiveButton("Next", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                closeContextMenu();
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+        }
+        else {
+            if (mNumberQuestions > 1) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Wrong!")
+                        .setMessage("Your actual score is " + mScore)
+                        .setPositiveButton("Next", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                closeContextMenu();
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+        }
 
-        if (-- mNumbreQuestions > 0)
+        if (-- mNumberQuestions > 0)
         {
             mCurrentQuestion = mQuestionBank.getQuestion();
             displayQuestion(mCurrentQuestion);
         }
         else
         {
-
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Finish !")
+                    .setMessage("Your score is " + mScore)
+                    .setPositiveButton("End", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent();
+                            intent.putExtra(BUNDLE_EXTRA_SCORE, mScore);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+                    })
+                    .create()
+                    .show();
         }
-
     }
 
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putInt(BUNDLE_STATE_SCORE, mScore);
+        outState.putInt(BUNDLE_STATE_QUESTION, mNumberQuestions);
+
+        super.onSaveInstanceState(outState);
+    }
 }

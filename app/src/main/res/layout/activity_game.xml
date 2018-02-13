@@ -32,9 +32,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_margin="10dp"
         android:layout_weight="1"
         android:textColor="@android:color/white"
-        android:background="@color/colorPrimaryLight"
+        android:background="@color/colorPrimaryDark"
         android:textSize="20sp"
-        android:text="Answer1"/>
+        android:text="Answer1"
+        android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/activity_game_answer2_btn"
@@ -43,9 +44,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_margin="10dp"
         android:layout_weight="1"
         android:textColor="@android:color/white"
-        android:background="@color/colorPrimaryLight"
+        android:background="@color/colorPrimaryDark"
         android:textSize="20sp"
-        android:text="Answer2"/>
+        android:text="Answer2"
+        android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/activity_game_answer3_btn"
@@ -54,9 +56,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_margin="10dp"
         android:layout_weight="1"
         android:textColor="@android:color/white"
-        android:background="@color/colorPrimaryLight"
+        android:background="@color/colorPrimaryDark"
         android:textSize="20sp"
-        android:text="Answer3"/>
+        android:text="Answer3"
+        android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/activity_game_answer4_btn"
@@ -65,9 +68,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_margin="10dp"
         android:layout_weight="1"
         android:textColor="@android:color/white"
-        android:background="@color/colorPrimaryLight"
+        android:background="@color/colorPrimaryDark"
         android:textSize="20sp"
-        android:text="Answer4"/>
+        android:text="Answer4"
+        android:textAllCaps="false"/>
 
 
 </LinearLayout>
